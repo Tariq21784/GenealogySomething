@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genealogy of Morals: An Analytical Framework</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'nietzsche-deep': '#1A1A1A',
+                        'nietzsche-accent': '#C5A059',
+                        'nietzsche-base': '#F5F5F0',
+                        'nietzsche-blood': '#7D1D1D',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap');
+        body { background-color: #F5F5F0; font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin: auto;
+            height: 350px;
+        }
+
+        .accordion-content {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .accordion-content.open {
+            max-height: 5000px;
+            opacity: 1;
+            padding-bottom: 2rem;
+        }
+
+        .nav-link.active {
+            border-bottom: 3px solid #C5A059;
+            color: #1A1A1A;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+<!-- Chosen Palette: "The Hammer & The Hearth" -->
+<!-- Application Structure Plan: 
+     A modular view system where navigation handles the visibility and activation of content sections. 
+     The error was caused by event.target being undefined in the window.onload scope; 
+     logic has been refactored to check for event presence before updating UI states.
+-->
+<!-- Visualization & Content Choices:
+     - Vector of Ressentiment: Radar chart.
+     - The Debt/Guilt Cycle: Line chart.
+     - Etymological Map: Nested lists.
+-->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+<nav class="bg-nietzsche-deep text-white sticky top-0 z-50 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="flex justify-between items-center h-16">
+            <span class="text-nietzsche-accent font-serif text-xl tracking-widest">GENEALOGY OF MORALS</span>
+            <div class="hidden md:flex space-x-8 text-sm uppercase tracking-tighter">
+                <button onclick="showView('essay1', event)" class="nav-link py-5 transition-all" data-id="essay1">I: Good & Evil</button>
+                <button onclick="showView('essay2', event)" class="nav-link py-5 transition-all" data-id="essay2">II: Guilt & Bad Conscience</button>
+                <button onclick="showView('essay3', event)" class="nav-link py-5 transition-all" data-id="essay3">III: Ascetic Ideals</button>
+                <button onclick="showView('synthesis', event)" class="nav-link py-5 transition-all" data-id="synthesis">Data Synthesis</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-5xl mx-auto px-4 py-12">
+
+    <!-- VIEW: ESSAY 1 -->
+    <div id="essay1" class="view hidden opacity-0 transition-opacity duration-500">
+        <section class="mb-12">
+            <h1 class="text-5xl text-nietzsche-deep mb-4">First Essay: The Pathogenesis of Moral Values</h1>
+            <p class="text-xl text-gray-600 leading-relaxed italic">Analyzing the linguistic and psychological inversion that created "Good and Evil."</p>
+        </section>
+
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <div class="bg-white p-8 rounded-xl shadow-sm border-t-4 border-nietzsche-accent">
+                <h3 class="text-2xl font-serif mb-4">The Knightly-Aristocratic Method</h3>
+                <ul class="space-y-4 text-gray-700 text-sm">
+                    <li><span class="font-bold text-nietzsche-accent">Origin:</span> Self-affirmation.</li>
+                    <li><span class="font-bold text-nietzsche-accent">Definition:</span> Noble, powerful, beautiful.</li>
+                    <li><span class="font-bold text-nietzsche-accent">Opposition:</span> "Bad" as a secondary afterthought.</li>
+                </ul>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-sm border-t-4 border-nietzsche-blood">
+                <h3 class="text-2xl font-serif mb-4">The Sacerdotal-Priestly Method</h3>
+                <ul class="space-y-4 text-gray-700 text-sm">
+                    <li><span class="font-bold text-nietzsche-blood">Origin:</span> Ressentiment/Reaction.</li>
+                    <li><span class="font-bold text-nietzsche-blood">Definition:</span> "Evil" as the primary target (the strong).</li>
+                    <li><span class="font-bold text-nietzsche-blood">Opposition:</span> "Good" as the residue (the weak).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <div class="border-b border-gray-200">
+                <button onclick="toggleAcc(this)" class="w-full py-6 flex justify-between items-center text-left hover:text-nietzsche-accent transition-colors">
+                    <span class="text-xl font-bold uppercase tracking-widest">Exhaustive Data: The Slave Revolt</span>
+                    <span class="text-3xl">+</span>
+                </button>
+                <div class="accordion-content">
+                    <ul class="list-disc pl-8 space-y-4 text-gray-800">
+                        <li><strong>Etymology:</strong> Latin <em>malus</em> vs Greek <em>melas</em> (dark/common).</li>
+                        <li><strong>Free Will:</strong> A psychological invention to hold the "strong" accountable for their nature.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW: ESSAY 2 -->
+    <div id="essay2" class="view hidden opacity-0 transition-opacity duration-500">
+        <section class="mb-12">
+            <h1 class="text-5xl text-nietzsche-deep mb-4">Second Essay: Guilt & Debt</h1>
+            <div class="bg-white p-10 rounded-2xl shadow-xl mt-8">
+                <div class="chart-container">
+                    <canvas id="debtChart"></canvas>
+                </div>
+            </div>
+        </section>
+        <div class="border-b border-gray-200">
+            <button onclick="toggleAcc(this)" class="w-full py-6 flex justify-between items-center text-left hover:text-nietzsche-accent transition-colors">
+                <span class="text-xl font-bold uppercase tracking-widest">Economics of Pain</span>
+                <span class="text-3xl">+</span>
+            </button>
+            <div class="accordion-content">
+                <p class="text-gray-700">Guilt (Schuld) originates in the material concept of Debt (Schulden). Pain was the original currency for failed repayment.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW: ESSAY 3 -->
+    <div id="essay3" class="view hidden opacity-0 transition-opacity duration-500">
+        <section class="mb-12">
+            <h1 class="text-5xl text-nietzsche-deep mb-4">Third Essay: Ascetic Ideals</h1>
+            <div class="grid md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-nietzsche-deep text-white p-6 rounded-lg text-center">Artist</div>
+                <div class="bg-nietzsche-accent text-white p-6 rounded-lg text-center">Philosopher</div>
+                <div class="bg-nietzsche-blood text-white p-6 rounded-lg text-center">Priest</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- VIEW: SYNTHESIS -->
+    <div id="synthesis" class="view hidden opacity-0 transition-opacity duration-500">
+        <section class="mb-12">
+            <h1 class="text-5xl text-nietzsche-deep mb-4">Data Synthesis</h1>
+            <div class="bg-white p-10 rounded-2xl shadow-xl mb-12">
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</main>
+
+<script>
+    function showView(viewId, event) {
+        // 1. Hide all views
+        document.querySelectorAll('.view').forEach(v => {
+            v.classList.add('hidden');
+            v.classList.remove('opacity-100');
+        });
+
+        // 2. Remove active state from all nav links
+        document.querySelectorAll('.nav-link').forEach(l => {
+            l.classList.remove('active');
+        });
+        
+        // 3. Show target view
+        const target = document.getElementById(viewId);
+        if (target) {
+            target.classList.remove('hidden');
+            setTimeout(() => target.classList.add('opacity-100'), 10);
+        }
+        
+        // 4. Set active link
+        if (event && event.target) {
+            event.target.classList.add('active');
+        } else {
+            // Fallback for initial load
+            const activeLink = document.querySelector(`.nav-link[data-id="${viewId}"]`);
+            if (activeLink) activeLink.classList.add('active');
+        }
+
+        // 5. Init charts
+        if(viewId === 'essay2') initDebtChart();
+        if(viewId === 'synthesis') initRadarChart();
+    }
+
+    function toggleAcc(btn) {
+        const content = btn.nextElementSibling;
+        const icon = btn.querySelector('span:last-child');
+        if(content.classList.contains('open')) {
+            content.classList.remove('open');
+            icon.innerText = '+';
+        } else {
+            content.classList.add('open');
+            icon.innerText = '-';
+        }
+    }
+
+    let debtChart, radarChart;
+
+    function initDebtChart() {
+        if(debtChart) return;
+        const ctx = document.getElementById('debtChart').getContext('2d');
+        debtChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Pre-State', 'Tribal Law', 'Early Kingdom', 'Monotheism', 'Modernity'],
+                datasets: [{
+                    label: 'Bad Conscience',
+                    data: [5, 15, 45, 85, 100],
+                    borderColor: '#C5A059',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
+
+    function initRadarChart() {
+        if(radarChart) return;
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Action', 'Cleverness', 'Ressentiment', 'Truthfulness', 'Forgetfulness'],
+                datasets: [{
+                    label: 'Noble',
+                    data: [100, 30, 5, 90, 100],
+                    borderColor: '#C5A059'
+                }, {
+                    label: 'Slave',
+                    data: [20, 100, 100, 60, 10],
+                    borderColor: '#7D1D1D'
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
+
+    window.onload = () => showView('essay1');
+</script>
+</body>
+</html>
