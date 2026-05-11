@@ -35,6 +35,16 @@
         .nav-link.active { color: #B8860B; border-bottom: 2px solid #B8860B; }
         .metric-card { background: #1A1A1A; border: 1px solid #2A2A2A; transition: 0.3s; }
         .metric-card:hover { border-color: #B8860B; background: #222; }
+        
+        /* Gemini Pulse Animation */
+        .gemini-pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(184, 134, 11, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(184, 134, 11, 0); }
+        }
     </style>
 </head>
 <body class="p-0 m-0">
@@ -53,6 +63,7 @@
             <button onclick="navTo('essay2')" class="nav-link text-left hover:text-atlas-gold transition-all" id="nav-essay2">02. Debt & Conscience</button>
             <button onclick="navTo('essay3')" class="nav-link text-left hover:text-atlas-gold transition-all" id="nav-essay3">03. Ascetic Teleology</button>
             <button onclick="navTo('strauss')" class="nav-link text-left hover:text-atlas-gold transition-all" id="nav-strauss">04. The Esoteric Layer</button>
+            <button onclick="navTo('gemini-lab')" class="nav-link text-left hover:text-atlas-gold transition-all text-atlas-gold font-black" id="nav-gemini-lab">05. ✨ Genealogy Lab</button>
         </nav>
 
         <div class="mt-auto straussian-layer p-4">
@@ -205,23 +216,125 @@
             </div>
         </div>
 
+        <!-- SECTION: GEMINI LAB -->
+        <div id="section-gemini-lab" class="view-section">
+            <h2 class="text-6xl font-serif font-black mb-8 text-atlas-gold">✨ Genealogy <span class="text-white">Lab</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- Tool 1: Moral Transvaluator -->
+                <div class="metric-card p-8 rounded border border-atlas-gold/30">
+                    <h3 class="text-xl font-bold mb-4">✨ Moral Transvaluator</h3>
+                    <p class="text-sm text-gray-400 mb-6">Input a modern moral statement or news headline. The LLM will perform a genealogy to reveal underlying ressentiment or slave-morality logic.</p>
+                    <textarea id="moral-input" class="w-full bg-atlas-obsidian border border-atlas-ink p-3 text-sm text-atlas-stone h-24 mb-4" placeholder="Example: 'Everyone deserves equal access to happiness regardless of merit.'"></textarea>
+                    <button onclick="runTransvaluation()" class="w-full bg-atlas-gold text-atlas-obsidian font-bold py-2 rounded text-xs uppercase hover:bg-white transition-colors">Analyze Values ✨</button>
+                    <div id="transvaluation-output" class="mt-6 text-sm text-atlas-gold italic border-l-2 border-atlas-gold pl-4 hidden"></div>
+                </div>
+
+                <!-- Tool 2: Straussian Esoteric Reader -->
+                <div class="metric-card p-8 rounded border border-atlas-blood/30">
+                    <h3 class="text-xl font-bold mb-4">✨ Esoteric Reader</h3>
+                    <p class="text-sm text-gray-400 mb-6">Submit a Nietzschean aphorism. The LLM will generate a Straussian esoteric reading vs. the exoteric public surface.</p>
+                    <input id="aphorism-input" class="w-full bg-atlas-obsidian border border-atlas-ink p-3 text-sm text-atlas-stone mb-4" placeholder="Enter aphorism or theme...">
+                    <button onclick="runStraussianReading()" class="w-full border border-atlas-gold text-atlas-gold font-bold py-2 rounded text-xs uppercase hover:bg-atlas-gold hover:text-atlas-obsidian transition-colors">Unmask Subtext ✨</button>
+                    <div id="strauss-output" class="mt-6 text-sm text-gray-300 space-y-4 hidden">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-gray-500">Exoteric:</span>
+                            <p id="exoteric-out" class="italic"></p>
+                        </div>
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-atlas-gold">Esoteric (Legislative):</span>
+                            <p id="esoteric-out" class="font-serif"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="metric-card p-6 rounded text-center">
+                <p class="text-[10px] text-gray-500 uppercase font-bold">Powered by Gemini 2.5 Flash Preview</p>
+            </div>
+        </div>
+
     </main>
 </div>
 
 <script>
+    const apiKey = ""; // Runtime provides key
+
     // NAVIGATION LOGIC
     function navTo(viewId) {
-        // Hide all
         document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
         
-        // Show target
         document.getElementById(`section-${viewId}`).classList.add('active');
         document.getElementById(`nav-${viewId}`).classList.add('active');
 
-        // Init charts
         if (viewId === 'intro') initEntropyChart();
         if (viewId === 'essay2') initMnemoChart();
+    }
+
+    // GEMINI API UTILITY
+    async function callGemini(prompt, systemPrompt) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        const payload = {
+            contents: [{ parts: [{ text: prompt }] }],
+            systemInstruction: { parts: [{ text: systemPrompt }] }
+        };
+
+        for (let i = 0; i < 5; i++) {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text;
+            } catch (err) {
+                await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
+            }
+        }
+        return "Error connecting to the oracle.";
+    }
+
+    // AI FEATURES
+    async function runTransvaluation() {
+        const input = document.getElementById('moral-input').value;
+        const output = document.getElementById('transvaluation-output');
+        if (!input) return;
+        
+        output.innerText = "Deconstructing values...";
+        output.classList.remove('hidden');
+
+        const system = "You are a Nietzschean analyst. Analyze modern moral statements through the lens of 'On the Genealogy of Morals'. Identify signs of ressentiment, slave-morality, the redirection of cruelty, or the ascetic ideal. Be rigorous, cold, and structural.";
+        const result = await callGemini(`Perform a genealogy on this statement: "${input}"`, system);
+        output.innerText = result;
+    }
+
+    async function runStraussianReading() {
+        const input = document.getElementById('aphorism-input').value;
+        const outputDiv = document.getElementById('strauss-output');
+        const exo = document.getElementById('exoteric-out');
+        const eso = document.getElementById('esoteric-out');
+        
+        if (!input) return;
+        
+        outputDiv.classList.remove('hidden');
+        exo.innerText = "Analyzing surface...";
+        eso.innerText = "Decoding esoteric intent...";
+
+        const system = "You are a Straussian scholar. Provide a dual-layered reading of Nietzschean themes. The 'Exoteric' reading should be what the public hears (rebellion, history). The 'Esoteric' reading should focus on 'Philosophical Legislation', the secret management of the herd, and the preservation of higher types.";
+        
+        const resultText = await callGemini(`Analyze: "${input}"`, system + " Return JSON format: {exoteric: string, esoteric: string}");
+        
+        try {
+            const cleanJson = resultText.replace(/```json|```/g, '').trim();
+            const data = JSON.parse(cleanJson);
+            exo.innerText = data.exoteric;
+            eso.innerText = data.esoteric;
+        } catch (e) {
+            exo.innerText = "The analysis was too dense for standard output.";
+            eso.innerText = resultText;
+        }
     }
 
     // CHARTING LOGIC
