@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Genealogy of Morals: An Analytical Framework</title>
+    <title>The Genealogy of Morals: Definitive Analysis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -11,256 +11,293 @@
             theme: {
                 extend: {
                     colors: {
-                        'nietzsche-deep': '#1A1A1A',
-                        'nietzsche-accent': '#C5A059',
-                        'nietzsche-base': '#F5F5F0',
-                        'nietzsche-blood': '#7D1D1D',
+                        'atlas-stone': '#E8E6E1',
+                        'atlas-gold': '#B8860B',
+                        'atlas-obsidian': '#0D0D0D',
+                        'atlas-blood': '#5C1212',
+                        'atlas-ink': '#2C2C2C'
+                    },
+                    fontFamily: {
+                        'serif': ['"Georgia"', 'serif'],
+                        'mono': ['"Courier New"', 'monospace']
                     }
                 }
             }
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap');
-        body { background-color: #F5F5F0; font-family: 'Inter', sans-serif; }
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
-        
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 700px;
-            margin: auto;
-            height: 350px;
-        }
-
-        .accordion-content {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-        }
-        .accordion-content.open {
-            max-height: 5000px;
-            opacity: 1;
-            padding-bottom: 2rem;
-        }
-
-        .nav-link.active {
-            border-bottom: 3px solid #C5A059;
-            color: #1A1A1A;
-            font-weight: 600;
-        }
+        body { background-color: #0D0D0D; color: #E8E6E1; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .straussian-layer { border-left: 2px dashed #B8860B; background: rgba(184, 134, 11, 0.05); }
+        .data-stream { font-family: 'mono'; color: #B8860B; font-size: 0.7rem; }
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.8s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-link.active { color: #B8860B; border-bottom: 2px solid #B8860B; }
+        .metric-card { background: #1A1A1A; border: 1px solid #2A2A2A; transition: 0.3s; }
+        .metric-card:hover { border-color: #B8860B; background: #222; }
     </style>
 </head>
-<body class="overflow-x-hidden">
+<body class="p-0 m-0">
 
-<!-- Chosen Palette: "The Hammer & The Hearth" -->
-<!-- Application Structure Plan: 
-     A modular view system where navigation handles the visibility and activation of content sections. 
-     The error was caused by event.target being undefined in the window.onload scope; 
-     logic has been refactored to check for event presence before updating UI states.
--->
-<!-- Visualization & Content Choices:
-     - Vector of Ressentiment: Radar chart.
-     - The Debt/Guilt Cycle: Line chart.
-     - Etymological Map: Nested lists.
--->
-<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
-<nav class="bg-nietzsche-deep text-white sticky top-0 z-50 shadow-2xl">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="flex justify-between items-center h-16">
-            <span class="text-nietzsche-accent font-serif text-xl tracking-widest">GENEALOGY OF MORALS</span>
-            <div class="hidden md:flex space-x-8 text-sm uppercase tracking-tighter">
-                <button onclick="showView('essay1', event)" class="nav-link py-5 transition-all" data-id="essay1">I: Good & Evil</button>
-                <button onclick="showView('essay2', event)" class="nav-link py-5 transition-all" data-id="essay2">II: Guilt & Bad Conscience</button>
-                <button onclick="showView('essay3', event)" class="nav-link py-5 transition-all" data-id="essay3">III: Ascetic Ideals</button>
-                <button onclick="showView('synthesis', event)" class="nav-link py-5 transition-all" data-id="synthesis">Data Synthesis</button>
-            </div>
+<div class="flex h-screen">
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="w-72 bg-atlas-obsidian border-r border-atlas-ink flex flex-col p-8 space-y-12">
+        <div>
+            <h1 class="font-serif text-3xl font-black tracking-tighter leading-none mb-2">FRIEDRICH<br><span class="text-atlas-gold">NIETZSCHE</span></h1>
+            <p class="data-stream uppercase tracking-widest">1887 Polemic Analysis</p>
         </div>
-    </div>
-</nav>
+        
+        <nav class="flex flex-col space-y-6 text-xs font-bold uppercase tracking-widest text-gray-500">
+            <button onclick="navTo('intro')" class="nav-link text-left hover:text-atlas-gold transition-all" id="nav-intro">00. The Core Thesis</button>
+            <button onclick="navTo('essay1')" class="nav-link text-left hover:text-atlas-gold transition-all" id="nav-essay1">01. Value Transvaluation</button>
+            <button onclick="navTo('essay2')" class="nav-link text-left hover:text-atlas-gold transition-all" id="nav-essay2">02. Debt & Conscience</button>
+            <button onclick="navTo('essay3')" class="nav-link text-left hover:text-atlas-gold transition-all" id="nav-essay3">03. Ascetic Teleology</button>
+            <button onclick="navTo('strauss')" class="nav-link text-left hover:text-atlas-gold transition-all" id="nav-strauss">04. The Esoteric Layer</button>
+        </nav>
 
-<main class="max-w-5xl mx-auto px-4 py-12">
+        <div class="mt-auto straussian-layer p-4">
+            <p class="text-[10px] text-atlas-gold font-bold uppercase mb-2 italic">Straussian Note:</p>
+            <p class="text-[11px] text-gray-400 italic leading-tight">Nietzsche is not just a historian; he is a legislator of values using history as a rhetorical weapon.</p>
+        </div>
+    </aside>
 
-    <!-- VIEW: ESSAY 1 -->
-    <div id="essay1" class="view hidden opacity-0 transition-opacity duration-500">
-        <section class="mb-12">
-            <h1 class="text-5xl text-nietzsche-deep mb-4">First Essay: The Pathogenesis of Moral Values</h1>
-            <p class="text-xl text-gray-600 leading-relaxed italic">Analyzing the linguistic and psychological inversion that created "Good and Evil."</p>
-        </section>
-
-        <div class="grid md:grid-cols-2 gap-8 mb-12">
-            <div class="bg-white p-8 rounded-xl shadow-sm border-t-4 border-nietzsche-accent">
-                <h3 class="text-2xl font-serif mb-4">The Knightly-Aristocratic Method</h3>
-                <ul class="space-y-4 text-gray-700 text-sm">
-                    <li><span class="font-bold text-nietzsche-accent">Origin:</span> Self-affirmation.</li>
-                    <li><span class="font-bold text-nietzsche-accent">Definition:</span> Noble, powerful, beautiful.</li>
-                    <li><span class="font-bold text-nietzsche-accent">Opposition:</span> "Bad" as a secondary afterthought.</li>
-                </ul>
-            </div>
-            <div class="bg-white p-8 rounded-xl shadow-sm border-t-4 border-nietzsche-blood">
-                <h3 class="text-2xl font-serif mb-4">The Sacerdotal-Priestly Method</h3>
-                <ul class="space-y-4 text-gray-700 text-sm">
-                    <li><span class="font-bold text-nietzsche-blood">Origin:</span> Ressentiment/Reaction.</li>
-                    <li><span class="font-bold text-nietzsche-blood">Definition:</span> "Evil" as the primary target (the strong).</li>
-                    <li><span class="font-bold text-nietzsche-blood">Opposition:</span> "Good" as the residue (the weak).</li>
-                </ul>
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto p-12 bg-atlas-obsidian">
+        
+        <!-- SECTION: INTRO -->
+        <div id="section-intro" class="view-section active">
+            <h2 class="text-7xl font-serif font-black mb-8">The Architectonics <br>of <span class="italic text-atlas-gold">Guilt</span></h2>
+            <div class="grid grid-cols-2 gap-12">
+                <div class="space-y-6">
+                    <p class="text-xl text-gray-400 leading-relaxed">The *Genealogy* is a pre-emptive strike against the self-deception of the modern "civilized" man. It seeks to destroy the illusion that morality is a natural, objective fact.</p>
+                    <div class="metric-card p-6 rounded">
+                        <h4 class="text-atlas-gold font-bold uppercase text-xs mb-4">Functional Correlation</h4>
+                        <p class="text-sm">Nietzsche identifies that as **State Sophistication** increases, **Psychological Health** (biological vitality) decreases. Morality is the tool used to manage the resulting internal tension.</p>
+                    </div>
+                </div>
+                <div class="h-64 metric-card p-4 rounded flex items-center justify-center">
+                    <canvas id="entropyChart"></canvas>
+                </div>
             </div>
         </div>
 
-        <div class="space-y-4">
-            <div class="border-b border-gray-200">
-                <button onclick="toggleAcc(this)" class="w-full py-6 flex justify-between items-center text-left hover:text-nietzsche-accent transition-colors">
-                    <span class="text-xl font-bold uppercase tracking-widest">Exhaustive Data: The Slave Revolt</span>
-                    <span class="text-3xl">+</span>
-                </button>
-                <div class="accordion-content">
-                    <ul class="list-disc pl-8 space-y-4 text-gray-800">
-                        <li><strong>Etymology:</strong> Latin <em>malus</em> vs Greek <em>melas</em> (dark/common).</li>
-                        <li><strong>Free Will:</strong> A psychological invention to hold the "strong" accountable for their nature.</li>
+        <!-- SECTION: ESSAY 1 -->
+        <div id="section-essay1" class="view-section">
+            <h2 class="text-5xl font-serif font-black mb-12">I. Good/Evil <span class="text-atlas-gold">vs</span> Good/Bad</h2>
+            
+            <div class="grid grid-cols-3 gap-6 mb-12">
+                <div class="p-6 bg-atlas-ink/30 border border-atlas-gold/20">
+                    <h3 class="text-atlas-gold font-bold uppercase text-xs mb-2">Etymological Anchor A</h3>
+                    <p class="text-lg italic font-serif">Agathos (Noble)</p>
+                    <p class="text-xs text-gray-400 mt-2">Derived from status, courage, and power. Truthfulness was a secondary luxury of the strong.</p>
+                </div>
+                <div class="p-6 bg-atlas-ink/30 border border-atlas-gold/20">
+                    <h3 class="text-atlas-gold font-bold uppercase text-xs mb-2">Etymological Anchor B</h3>
+                    <p class="text-lg italic font-serif">Malus (Base)</p>
+                    <p class="text-xs text-gray-400 mt-2">Correlated with "dark-haired" or "dark-skinned" indigenous populations conquered by the "Aryans."</p>
+                </div>
+                <div class="p-6 bg-atlas-ink/30 border border-atlas-gold/20">
+                    <h3 class="text-atlas-gold font-bold uppercase text-xs mb-2">The Inversion</h3>
+                    <p class="text-lg italic font-serif">Böse (Evil)</p>
+                    <p class="text-xs text-gray-400 mt-2">A product of **Ressentiment**. The "evil" one is the object of hate; the "good" one is merely the residue.</p>
+                </div>
+            </div>
+
+            <div class="space-y-8">
+                <div class="p-8 straussian-layer">
+                    <h4 class="text-atlas-gold uppercase text-xs font-bold mb-4">Deep Logic: The Bird of Prey Paradox</h4>
+                    <p class="text-gray-300 mb-4">The lamb hates the bird of prey and calls it "evil." The bird of prey loves the lamb and calls it "tasty." To ask strength not to express itself as strength is a biological impossibility. Morality invents the "Subject" (Free Will) so that strength can be blamed for its existence.</p>
+                    <div class="data-stream uppercase font-bold text-atlas-gold">Status: [Biological Imperative Overridden by Social Construct]</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: ESSAY 2 -->
+        <div id="section-essay2" class="view-section">
+            <h2 class="text-5xl font-serif font-black mb-12">II. The <span class="text-atlas-gold">Economics</span> of Guilt</h2>
+            
+            <div class="grid grid-cols-2 gap-12 mb-12">
+                <div class="metric-card p-10 rounded">
+                    <h3 class="text-2xl font-serif italic mb-6">"Schuld" (Guilt) = "Schulden" (Debt)</h3>
+                    <p class="text-sm text-gray-400 mb-6">Nietzsche traces the origin of conscience not to the "soul," but to the law of contract. The creditor has the right to inflict **Cruelty** on the debtor as compensation for lost value.</p>
+                    <ul class="space-y-4 text-sm font-mono text-atlas-gold">
+                        <li>> CREDITOR -> DEBTOR</li>
+                        <li>> FAILURE TO PAY -> RIGHT TO PUNISH</li>
+                        <li>> PUNISHMENT -> PLEASURE OF CRUELTY</li>
+                        <li>> DEBT SATISFIED VIA SUFFERING</li>
                     </ul>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- VIEW: ESSAY 2 -->
-    <div id="essay2" class="view hidden opacity-0 transition-opacity duration-500">
-        <section class="mb-12">
-            <h1 class="text-5xl text-nietzsche-deep mb-4">Second Essay: Guilt & Debt</h1>
-            <div class="bg-white p-10 rounded-2xl shadow-xl mt-8">
-                <div class="chart-container">
-                    <canvas id="debtChart"></canvas>
+                <div class="metric-card p-10 rounded">
+                    <h3 class="text-2xl font-serif italic mb-6">Mnemotechnics</h3>
+                    <p class="text-sm text-gray-400 mb-6">"Only that which never ceases to hurt stays in the memory." Civilization is the process of making the human animal **calculable** via the application of pain.</p>
+                    <div class="h-40">
+                        <canvas id="mnemoChart"></canvas>
+                    </div>
                 </div>
             </div>
-        </section>
-        <div class="border-b border-gray-200">
-            <button onclick="toggleAcc(this)" class="w-full py-6 flex justify-between items-center text-left hover:text-nietzsche-accent transition-colors">
-                <span class="text-xl font-bold uppercase tracking-widest">Economics of Pain</span>
-                <span class="text-3xl">+</span>
-            </button>
-            <div class="accordion-content">
-                <p class="text-gray-700">Guilt (Schuld) originates in the material concept of Debt (Schulden). Pain was the original currency for failed repayment.</p>
-            </div>
         </div>
-    </div>
 
-    <!-- VIEW: ESSAY 3 -->
-    <div id="essay3" class="view hidden opacity-0 transition-opacity duration-500">
-        <section class="mb-12">
-            <h1 class="text-5xl text-nietzsche-deep mb-4">Third Essay: Ascetic Ideals</h1>
-            <div class="grid md:grid-cols-3 gap-6 mb-12">
-                <div class="bg-nietzsche-deep text-white p-6 rounded-lg text-center">Artist</div>
-                <div class="bg-nietzsche-accent text-white p-6 rounded-lg text-center">Philosopher</div>
-                <div class="bg-nietzsche-blood text-white p-6 rounded-lg text-center">Priest</div>
-            </div>
-        </section>
-    </div>
-
-    <!-- VIEW: SYNTHESIS -->
-    <div id="synthesis" class="view hidden opacity-0 transition-opacity duration-500">
-        <section class="mb-12">
-            <h1 class="text-5xl text-nietzsche-deep mb-4">Data Synthesis</h1>
-            <div class="bg-white p-10 rounded-2xl shadow-xl mb-12">
-                <div class="chart-container">
-                    <canvas id="radarChart"></canvas>
+        <!-- SECTION: ESSAY 3 -->
+        <div id="section-essay3" class="view-section">
+            <h2 class="text-5xl font-serif font-black mb-12">III. The <span class="text-atlas-gold">Ascetic</span> Ideal</h2>
+            
+            <div class="grid grid-cols-3 gap-6">
+                <div class="p-8 bg-atlas-ink/30 border border-gray-800">
+                    <h4 class="text-atlas-gold uppercase text-xs font-bold mb-4">The Artist</h4>
+                    <p class="text-sm">Uses the ideal as a mask or a means of inspiration. (e.g., Wagner's late turn to Parsifal).</p>
+                </div>
+                <div class="p-8 bg-atlas-ink/30 border border-gray-800">
+                    <h4 class="text-atlas-gold uppercase text-xs font-bold mb-4">The Philosopher</h4>
+                    <p class="text-sm">Uses the ideal to secure solitude and the conditions for deep thought. Poverty, chastity, and obedience as "professional" tools.</p>
+                </div>
+                <div class="p-8 bg-atlas-ink/30 border border-atlas-gold/40">
+                    <h4 class="text-atlas-gold uppercase text-xs font-bold mb-4">The Priest</h4>
+                    <p class="text-sm">Uses the ideal as a survival strategy for the "sick." He redirects the sufferer's hate back onto themselves (Sin).</p>
                 </div>
             </div>
-        </section>
-    </div>
 
-</main>
+            <div class="mt-12 p-10 bg-atlas-blood/20 border border-atlas-blood/40 rounded">
+                <h4 class="text-2xl font-serif mb-4">The Redirection of Ressentiment</h4>
+                <p class="text-gray-300">The Sufferer asks: "Who is to blame for my misery?" <br>The Priest replies: "You alone are to blame for yourself." <br><br>This stroke of genius gives suffering a **meaning**, preventing suicidal nihilism by turning it into a "test."</p>
+            </div>
+        </div>
+
+        <!-- SECTION: STRAUSS -->
+        <div id="section-strauss" class="view-section">
+            <h2 class="text-6xl font-serif font-black mb-8 text-atlas-gold">The Straussian <span class="text-white">Inquiry</span></h2>
+            
+            <div class="space-y-12 max-w-4xl">
+                <div class="p-10 straussian-layer">
+                    <h3 class="text-2xl font-bold mb-4">1. Esoteric Legislation</h3>
+                    <p class="text-gray-400 leading-relaxed italic">
+                        Leo Strauss suggests that the highest philosophers are "legislators" who hide their most dangerous truths. Nietzsche's "esoteric" teaching in the *Genealogy* is not merely that morality is a social construct, but that **the Priest is actually a hidden Aristocrat**—a master of the soul who has successfully enslaved the "Strong."
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-12">
+                    <div>
+                        <h4 class="font-bold uppercase text-xs text-atlas-gold mb-4">The Paradox of Truth</h4>
+                        <p class="text-sm text-gray-300">Nietzsche claims to seek the "Truth" of morality, but he concludes that the "Will to Truth" is itself an ascetic ideal. Straussians argue that Nietzsche is aware he is destroying the very foundation upon which his own work stands. This is a **Noble Lie** turned inward.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold uppercase text-xs text-atlas-gold mb-4">The Strategic Target</h4>
+                        <p class="text-sm text-gray-300">The exoteric target is Christianity. The esoteric target is **Modern Liberalism** and **Socialism**, which Nietzsche views as the secular "residual" of Christian slave-morality, stripped of its spiritual depth but maintaining its "herd" logic.</p>
+                    </div>
+                </div>
+
+                <div class="bg-atlas-ink p-10 rounded border border-atlas-gold/20">
+                    <h4 class="font-serif text-3xl italic mb-6">Esoteric Correlation Data</h4>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+                            <span class="text-gray-400">Survival of the Priest Type</span>
+                            <span class="text-atlas-gold font-bold">100% Correlation to Moral Progress</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+                            <span class="text-gray-400">Erosion of Noble Forgetting</span>
+                            <span class="text-atlas-gold font-bold">Positive Scalar to Institutional Stability</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">The "Slave Revolt" Outcome</span>
+                            <span class="text-atlas-gold font-bold">Modern Equality (Final Stage of Ressentiment)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
 
 <script>
-    function showView(viewId, event) {
-        // 1. Hide all views
-        document.querySelectorAll('.view').forEach(v => {
-            v.classList.add('hidden');
-            v.classList.remove('opacity-100');
-        });
-
-        // 2. Remove active state from all nav links
-        document.querySelectorAll('.nav-link').forEach(l => {
-            l.classList.remove('active');
-        });
+    // NAVIGATION LOGIC
+    function navTo(viewId) {
+        // Hide all
+        document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
         
-        // 3. Show target view
-        const target = document.getElementById(viewId);
-        if (target) {
-            target.classList.remove('hidden');
-            setTimeout(() => target.classList.add('opacity-100'), 10);
-        }
-        
-        // 4. Set active link
-        if (event && event.target) {
-            event.target.classList.add('active');
-        } else {
-            // Fallback for initial load
-            const activeLink = document.querySelector(`.nav-link[data-id="${viewId}"]`);
-            if (activeLink) activeLink.classList.add('active');
-        }
+        // Show target
+        document.getElementById(`section-${viewId}`).classList.add('active');
+        document.getElementById(`nav-${viewId}`).classList.add('active');
 
-        // 5. Init charts
-        if(viewId === 'essay2') initDebtChart();
-        if(viewId === 'synthesis') initRadarChart();
+        // Init charts
+        if (viewId === 'intro') initEntropyChart();
+        if (viewId === 'essay2') initMnemoChart();
     }
 
-    function toggleAcc(btn) {
-        const content = btn.nextElementSibling;
-        const icon = btn.querySelector('span:last-child');
-        if(content.classList.contains('open')) {
-            content.classList.remove('open');
-            icon.innerText = '+';
-        } else {
-            content.classList.add('open');
-            icon.innerText = '-';
-        }
-    }
+    // CHARTING LOGIC
+    let entropyChart, mnemoChart;
 
-    let debtChart, radarChart;
-
-    function initDebtChart() {
-        if(debtChart) return;
-        const ctx = document.getElementById('debtChart').getContext('2d');
-        debtChart = new Chart(ctx, {
+    function initEntropyChart() {
+        if (entropyChart) return;
+        const ctx = document.getElementById('entropyChart').getContext('2d');
+        entropyChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Pre-State', 'Tribal Law', 'Early Kingdom', 'Monotheism', 'Modernity'],
-                datasets: [{
-                    label: 'Bad Conscience',
-                    data: [5, 15, 45, 85, 100],
-                    borderColor: '#C5A059',
-                    fill: true,
-                    tension: 0.4
-                }]
+                labels: ['Pre-History', 'Antiquity', 'Middle Ages', 'Modernity', 'Post-Modern'],
+                datasets: [
+                    {
+                        label: 'Societal Complexity (Herd Stability)',
+                        data: [10, 30, 50, 90, 100],
+                        borderColor: '#B8860B',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Individual Vitality (Instinct Release)',
+                        data: [100, 80, 50, 20, 5],
+                        borderColor: '#5C1212',
+                        tension: 0.4
+                    }
+                ]
             },
-            options: { responsive: true, maintainAspectRatio: false }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { color: '#666' }, grid: { display: false } },
+                    y: { display: false }
+                }
+            }
         });
     }
 
-    function initRadarChart() {
-        if(radarChart) return;
-        const ctx = document.getElementById('radarChart').getContext('2d');
-        radarChart = new Chart(ctx, {
-            type: 'radar',
+    function initMnemoChart() {
+        if (mnemoChart) return;
+        const ctx = document.getElementById('mnemoChart').getContext('2d');
+        mnemoChart = new Chart(ctx, {
+            type: 'bar',
             data: {
-                labels: ['Action', 'Cleverness', 'Ressentiment', 'Truthfulness', 'Forgetfulness'],
-                datasets: [{
-                    label: 'Noble',
-                    data: [100, 30, 5, 90, 100],
-                    borderColor: '#C5A059'
-                }, {
-                    label: 'Slave',
-                    data: [20, 100, 100, 60, 10],
-                    borderColor: '#7D1D1D'
-                }]
+                labels: ['Forgetfulness', 'Cruelty Index', 'Internalization', 'Calculability'],
+                datasets: [
+                    {
+                        label: 'Noble Archetype',
+                        data: [100, 80, 10, 20],
+                        backgroundColor: '#B8860B'
+                    },
+                    {
+                        label: 'Slave Archetype',
+                        data: [10, 20, 100, 95],
+                        backgroundColor: '#5C1212'
+                    }
+                ]
             },
-            options: { responsive: true, maintainAspectRatio: false }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { color: '#666' } },
+                    y: { display: false }
+                }
+            }
         });
     }
 
-    window.onload = () => showView('essay1');
+    // INITIAL LOAD
+    window.onload = () => {
+        navTo('intro');
+    }
 </script>
+
 </body>
 </html>
